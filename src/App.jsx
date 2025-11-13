@@ -49,11 +49,9 @@ function App() {
       } finally {
         setLoading(false);
       }
-
-
     };
     fetchTodos();
-  });
+  }, []);
 
   return (
     <div className="container mx-auto my-auto p-4">
