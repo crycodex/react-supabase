@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase/client";
 
+/* componentes */
+import { TableComponent } from "./components/table_component";
+import { CodeComponent } from "./components/code_component";
+import { TableRolComponent } from "./components/tbl_rol_component";
+
 function App() {
   const [status, setStatus] = useState("Verificando...");
-  //estados para la tabla
-  const [todos, setTodos] = useState([]);
-  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const checkConnection = async () => {
@@ -26,33 +29,7 @@ function App() {
     checkConnection();
   }, []);
 
-  //funcion para obtener los datos de la tabla
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        setLoading(true);
-        //1. consulta a la tabla
-        const { data, error } = await supabase
-          .from("Todo")
-          .select("*")
-          .order("id", { ascending: true });
-
-        console.log("data" + data);
-
-        if (error) {
-          console.log("error" + error);
-        } else {
-          setTodos(data || []);
-        }
-      } catch (e) {
-        console.log("error" + e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTodos();
-  }, []);
-
+ 
   return (
     <div className="container mx-auto my-auto p-4">
       <h1>Conexion a supabase</h1>
@@ -60,17 +37,7 @@ function App() {
 
       <h1>Cristhian Recalde</h1>
 
-      <div className="mockup-code w-full">
-        <pre data-prefix="$">
-          <code>npm i daisyui</code>
-        </pre>
-        <pre data-prefix=">" className="text-warning">
-          <code>installing...</code>
-        </pre>
-        <pre data-prefix=">" className="text-success">
-          <code>Done!</code>
-        </pre>
-      </div>
+    <CodeComponent />
 
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
@@ -95,37 +62,16 @@ function App() {
         </svg>
       </label>
 
-      <h1>Tabla Todo</h1>
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
-        <div class="overflow-x-auto">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Created At</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>isCompleted</th>
-              </tr>
-            </thead>
-            <tbody>
-              {todos.map((todos, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{todos.id}</td>
-                    <td>{todos.created_at}</td>
-                    <td>{todos.title}</td>
-                    <td>{todos.description}</td>
-                    <td>{todos.is_completed ? "Completado" : "Pendiente"}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
+    <TableComponent />
+    <TableComponent />
+    <TableComponent />
+    <TableComponent />
+    <TableComponent />
+
+    <h1>Roles</h1>
+    <TableRolComponent />
+    
+     
     </div>
   );
 }
